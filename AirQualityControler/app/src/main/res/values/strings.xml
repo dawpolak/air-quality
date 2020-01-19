@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Air Quality Controler</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="Languages">
+        <item>Java</item>
+        <item>Kotlin</item>
+        <item>Swift</item>
+        <item>Python</item>
+        <item>Scala</item>
+        <item>Perl</item>
+        <item>Javascript</item>
+        <item>Jquery</item>
+    </string-array>
+</resources>
