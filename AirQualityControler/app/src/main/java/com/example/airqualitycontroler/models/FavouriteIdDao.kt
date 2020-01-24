@@ -4,10 +4,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Delete
+
+
 
 @Dao
 interface FavouriteIdDao {
-    @Query("SELECT * from favouriteId_table ORDER BY id ASC")
+    @Query("SELECT * from favouriteId_table ORDER BY id")
     fun getFavouriteIds(): List<FavouriteId>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -15,4 +18,7 @@ interface FavouriteIdDao {
 
     @Query("DELETE FROM favouriteId_table")
     suspend fun deleteAll()
+
+    @Delete
+    suspend fun deleteFavId(favId: FavouriteId)
 }

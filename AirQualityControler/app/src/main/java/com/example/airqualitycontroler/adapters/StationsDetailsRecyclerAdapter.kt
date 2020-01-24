@@ -1,5 +1,6 @@
 package com.example.airqualitycontroler.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,15 +31,11 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
     }
 
     fun setStations(stations: List<Station>) {
+        Log.d("dupa","Dodanie listy miast do wyswietlenia")
         this.stationList = stations as MutableList<Station>
         notifyDataSetChanged()
     }
 
-    fun setStationsInCity(stations: List<Station>,city: String) {
-        val stationsInCity = stations.filter { it.city.name.equals(city) }
-        this.stationList = stationsInCity as MutableList<Station>
-        notifyDataSetChanged()
-    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stationIdText: TextView = view.stationId

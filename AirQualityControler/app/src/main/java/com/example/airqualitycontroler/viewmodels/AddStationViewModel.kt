@@ -1,37 +1,43 @@
 package com.example.airqualitycontroler.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.airqualitycontroler.models.FavouriteId
 import com.example.airqualitycontroler.models.FavouriteIdRoomDatabase
-import com.example.airqualitycontroler.repositories.FavouriteIdRepository
 import com.example.airqualitycontroler.repositories.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddStationViewModel(application: Application) : ViewModel() {
-    val repository: Repository =
-        Repository()
+class AddStationViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val repository: Repository
+
+    init {
+        val favouriteIdsDao = FavouriteIdRoomDatabase.getDatabase(application).favouriteIdDao()
+        repository = Repository(favouriteIdsDao)
+    }
+
+    //api
     val listOfStations = liveData(Dispatchers.IO) {
         val retrivedStations = repository.getAllStations()
         emit(retrivedStations)
     }
 
-
-    private val favouriteIdrRepository: FavouriteIdRepository
-    val allFavouriteId: LiveData<List<FavouriteId>>
-
-    init {
-        val favouriteIdDao = FavouriteIdRoomDatabase.getDatabase(application).favouriteIdDao()
-        favouriteIdrRepository = FavouriteIdRepository(favouriteIdDao)
-        allFavouriteId = favouriteIdrRepository.allFavouriteIds
+    //baza
+    fun insert(favouriteId: FavouriteId) = viewModelScope.launch {
+        repository.insert(favouriteId)
     }
 
-    fun insert(favouriteId: FavouriteId) = viewModelScope.launch {
-        favouriteIdrRepository.insert(favouriteId)
+    fun delete(favouriteId: FavouriteId) = viewModelScope.launch {
+        repository.delete(favouriteId)
+    }
+
+    val listFavId = liveData(Dispatchers.IO) {
+        Log.d("dupa","vm: "+repository.getAllFavId().size)
+        val retrivedStations = repository.getAllFavId()
+        emit(retrivedStations)
     }
 }

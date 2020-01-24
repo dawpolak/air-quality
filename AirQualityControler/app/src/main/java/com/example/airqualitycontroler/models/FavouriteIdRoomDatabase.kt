@@ -10,8 +10,7 @@ public abstract class FavouriteIdRoomDatabase : RoomDatabase() {
     abstract fun favouriteIdDao(): FavouriteIdDao
 
     companion object {
-        // Singleton prevents multiple instances of database opening at the
-        // same time.
+
         @Volatile
         private var INSTANCE: FavouriteIdRoomDatabase? = null
 
@@ -24,7 +23,7 @@ public abstract class FavouriteIdRoomDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     FavouriteIdRoomDatabase::class.java,
-                    "word_database"
+                    "favourite_stations_database"
                 ).build()
                 INSTANCE = instance
                 return instance

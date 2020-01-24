@@ -1,6 +1,5 @@
 package com.example.airqualitycontroler.views
 
-import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,15 +23,9 @@ import com.example.airqualitycontroler.adapters.StationsRecyclerAdapter
 import com.example.airqualitycontroler.models.FavouriteId
 import com.example.airqualitycontroler.models.Station
 import com.example.airqualitycontroler.viewmodels.AddStationViewModel
-import com.example.airqualitycontroler.viewmodels.StationsViewModel
-
-
 
 class AddStationFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AddStationFragment()
-    }
     lateinit var myAdapter: StationsRecyclerAdapter
     lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: AddStationViewModel
@@ -49,41 +43,53 @@ class AddStationFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         recyclerView = getView()!!.findViewById(R.id.add_station_recycler)
 
+
         val autotextView = getView()!!.findViewById<AutoCompleteTextView>(R.id.cityAutoCompleteTextView)
+        var stations = listOf<Station>()
 
         viewModel = ViewModelProviders.of(this).get(AddStationViewModel::class.java)
-
-        var stations = listOf<Station>()
         viewModel.listOfStations.observe(viewLifecycleOwner, Observer<List<Station>> {
                 t -> stations=t
             var stationsName:List<String> = stations.map { it.city.name }
-
             autotextView.setAdapter(ArrayAdapter<String>(activity!!, android.R.layout.simple_list_item_1, stationsName))
         })
+        //var xd: List<FavouriteId> = mutableListOf()
+//        val xd = MutableLiveData<FavouriteId>()
+//        viewModel.listFavId.observe(viewLifecycleOwner, Observer<List<FavouriteId>>{t->xd})
 
         val button = getView()!!.findViewById<Button>(R.id.searchButton)
         if (button != null)
         {
+
             button ?.setOnClickListener(View.OnClickListener {
                 viewModel.listOfStations.observe(viewLifecycleOwner, Observer<List<Station>> { t ->
                     myAdapter.setStationsInCity(t!!,autotextView.getText().toString())
                 })
+                viewModel.listFavId.observe(viewLifecycleOwner, Observer<List<FavouriteId>> { t ->
+                    myAdapter.setFavId(t!!)
+                })
                 val enteredText = autotextView.getText()
                 Toast.makeText(activity, enteredText, Toast.LENGTH_SHORT).show()
             })
-
         }
         recyclerLoad()
-
     }
+
     private fun recyclerLoad() {
-
         myAdapter = StationsRecyclerAdapter {arg1,arg2 ->
-
-            Log.d("item", "Klikasz w: ${arg1} ${arg2}")
-            //viewModel.insert(arg1 as FavouriteId)
+            //Log.d("item", "Klikasz w: ${arg1} ${arg2}")
+            if(arg2)
+            {
+                viewModel.insert(FavouriteId(arg1.id))
+                Toast.makeText(activity,"Dodano",Toast.LENGTH_SHORT).show()
+            }else
+            {
+                viewModel.delete(FavouriteId(arg1.id))
+                Toast.makeText(activity,"Usunięto",Toast.LENGTH_SHORT).show()
+            }
 
         }
 
@@ -95,5 +101,4 @@ class AddStationFragment : Fragment() {
             adapter = myAdapter
         }
     }
-
 }

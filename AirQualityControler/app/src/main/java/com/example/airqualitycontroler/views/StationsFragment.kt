@@ -30,29 +30,31 @@ class StationsFragment : Fragment() {
     }
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.stations_fragment, container, false)
     }
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView = getView()!!.findViewById(R.id.stations_recycler)
 
         viewModel = ViewModelProviders.of(this).get(StationsViewModel::class.java)
-        viewModel.listOfStations.observe(viewLifecycleOwner, Observer<List<Station>> {
+
+        viewModel.listOfFavStations.observe(viewLifecycleOwner, Observer<List<Station>> {
                 t -> myAdapter.setStations(t!!)
         })
+
         recyclerLoad()
     }
 
     private fun recyclerLoad() {
-
+        Log.d("dupa","recyclerLoad")
         myAdapter = StationsDetailsRecyclerAdapter {
-
             Log.d("item", "Klikasz w: ${it.stationName}")
-
         }
 
         recyclerView.apply{
