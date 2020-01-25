@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.airqualitycontroler.R
 import com.example.airqualitycontroler.adapters.StationsDetailsRecyclerAdapter
+import com.example.airqualitycontroler.models.SensorsInStation
 import com.example.airqualitycontroler.models.Station
 import com.example.airqualitycontroler.viewmodels.StationsViewModel
 
@@ -44,9 +45,15 @@ class StationsFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(StationsViewModel::class.java)
 
+        viewModel.listOfSensors.observe(viewLifecycleOwner, Observer<List<SensorsInStation>> {
+                t -> myAdapter.setSensors(t!!)
+        })
+
         viewModel.listOfFavStations.observe(viewLifecycleOwner, Observer<List<Station>> {
                 t -> myAdapter.setStations(t!!)
         })
+
+
 
         recyclerLoad()
     }
@@ -54,7 +61,7 @@ class StationsFragment : Fragment() {
     private fun recyclerLoad() {
         Log.d("dupa","recyclerLoad")
         myAdapter = StationsDetailsRecyclerAdapter {
-            Log.d("item", "Klikasz w: ${it.stationName}")
+            //Log.d("item", "Klikasz w: ${it.stationName}")
         }
 
         recyclerView.apply{

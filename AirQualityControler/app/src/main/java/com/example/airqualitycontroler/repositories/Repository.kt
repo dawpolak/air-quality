@@ -12,6 +12,7 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
     suspend fun getAllStations() = client.getAllStations()
 
 
+
     //Room
     suspend fun getAllFavId() = favouriteIdDao.getFavouriteIds()
     suspend fun insert(favouriteId: FavouriteId) {
@@ -28,5 +29,22 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
 
         return stations.filter { it.id in favId.map { Item -> Item.favouriteId }}
     }
+    //suspend fun getSensorsFromStation(station: Station) = client.getAllSensors(station.id)
+    suspend  fun  getSensorsFromFavStation(): List<SensorsInStation>
+    {
+        val sensorsInStations = mutableListOf<SensorsInStation>()
+        val favId = favouriteIdDao.getFavouriteIds()
+        favId.forEach{
+            val sensors = client.getAllSensors(it.favouriteId)
+            val values = mutableListOf<Value>()
+            sensors.forEach{
+                values.add(client.getAllValues(it.id))
+            }
+            sensorsInStations.add(SensorsInStation(sensors,values))
+        }
+
+        return sensorsInStations
+    }
+
 
 }

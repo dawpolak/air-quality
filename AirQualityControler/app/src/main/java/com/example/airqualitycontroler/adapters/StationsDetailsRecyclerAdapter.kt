@@ -4,14 +4,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airqualitycontroler.R
+import com.example.airqualitycontroler.models.SensorsInStation
 import com.example.airqualitycontroler.models.Station
 import kotlinx.android.synthetic.main.single_row_station_details.view.*
 
 class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : RecyclerView.Adapter<StationsDetailsRecyclerAdapter.ViewHolder>() {
     private var stationList: MutableList<Station> = mutableListOf()
+    private var sensorsList: MutableList<SensorsInStation> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.single_row_station_details, parent, false)
@@ -25,14 +30,29 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
 
     override fun onBindViewHolder(holder: StationsDetailsRecyclerAdapter.ViewHolder, position: Int) {
         var station = stationList[position]
-
+        var sensor = sensorsList[position]
+        val sb = StringBuilder()
         holder.stationIdText.text = station.id.toString()
         holder.stationNameText.text = station.stationName
+        holder.expandableLayout.isVisible=false
+
+        for (item: Int in sensor.listOfSensors.indices) {
+            sb.appendln(sensor.listOfSensors[item].param.paramFormula+": "+sensor.listOfValues[item].values[0].value)
+        }
+
+        holder.sensors.text=sb
+        //Log.d("dupa","onBind:"+position+" "+sensor.listOfSensors.toString())
     }
 
     fun setStations(stations: List<Station>) {
         Log.d("dupa","Dodanie listy miast do wyswietlenia")
         this.stationList = stations as MutableList<Station>
+        //notifyDataSetChanged()
+    }
+
+    fun setSensors(sensors: List<SensorsInStation>) {
+        Log.d("dupa","Dodanie listy sensorów do wyswietlenia")
+        this.sensorsList = sensors as MutableList<SensorsInStation>
         notifyDataSetChanged()
     }
 
@@ -40,13 +60,26 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stationIdText: TextView = view.stationId
         val stationNameText: TextView = view.stationName
+        val expandableLayout: ConstraintLayout=view.expanableLayout
+        val sensors: TextView = view.textView
 
         init {
-            view.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onItemClick(stationList[adapterPosition])
+            stationNameText.setOnClickListener()
+            {
+                if(expandableLayout.isVisible) {
+                    expandableLayout.isVisible = false
+                }else {
+                    expandableLayout.isVisible = true
                 }
             }
+
+            //val max = if (a > b) a else b
+
+//            view.setOnClickListener {
+//                if (adapterPosition != RecyclerView.NO_POSITION) {
+//                    onItemClick(stationList[adapterPosition])
+//                }
+//            }
         }
     }
 

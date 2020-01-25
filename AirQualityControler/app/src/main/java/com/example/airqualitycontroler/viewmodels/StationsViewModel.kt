@@ -26,6 +26,12 @@ class StationsViewModel(application: Application) : AndroidViewModel(application
         emit(retrivedStations)
     }
 
+    val listOfSensors = liveData(Dispatchers.IO) {
+        Log.d("dupa","retrivedStations:"+repository.getSensorsFromFavStation().toString())
+        val retrivedStations = repository.getSensorsFromFavStation()
+        emit(retrivedStations)
+    }
+
     //baza
 
 
