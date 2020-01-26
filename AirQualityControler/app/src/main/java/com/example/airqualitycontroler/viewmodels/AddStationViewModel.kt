@@ -36,8 +36,7 @@ class AddStationViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     val listFavId = liveData(Dispatchers.IO) {
-        Log.d("dupa","vm: "+repository.getAllFavId().size)
-        val retrivedStations = repository.getAllFavId()
-        emit(retrivedStations)
+        val retrivedFavIds = repository.getAllFavId()
+        emit(retrivedFavIds)
     }
 }

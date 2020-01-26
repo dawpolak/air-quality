@@ -25,23 +25,29 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
     }
 
     override fun getItemCount(): Int {
-        return stationList.size
+        return sensorsList.size
     }
 
     override fun onBindViewHolder(holder: StationsDetailsRecyclerAdapter.ViewHolder, position: Int) {
-        var station = stationList[position]
-        var sensor = sensorsList[position]
+        holder.expandableLayout.isVisible = false
+        Log.d("infoo","sensors:"+sensorsList.size.toString()+"stations:"+stationList.size.toString())
+        if(!sensorsList.isEmpty()&&!stationList.isEmpty()) {
+
+            var station = stationList[position]
+            holder.stationNameText.text = station.stationName
+
+
+
+        var sensor: SensorsInStation
         val sb = StringBuilder()
-        holder.stationIdText.text = station.id.toString()
-        holder.stationNameText.text = station.stationName
-        holder.expandableLayout.isVisible=false
 
-        for (item: Int in sensor.listOfSensors.indices) {
-            sb.appendln(sensor.listOfSensors[item].param.paramFormula+": "+sensor.listOfValues[item].values[0].value)
+            sensor = sensorsList[position]
+            for (item: Int in sensor.listOfSensors.indices) {
+                sb.appendln(sensor.listOfSensors[item].param.paramFormula + ": " + sensor.listOfValues[item].values[0].value)
+            }
+
+            holder.sensors.text = sb
         }
-
-        holder.sensors.text=sb
-        //Log.d("dupa","onBind:"+position+" "+sensor.listOfSensors.toString())
     }
 
     fun setStations(stations: List<Station>) {
@@ -53,27 +59,28 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
     fun setSensors(sensors: List<SensorsInStation>) {
         Log.d("dupa","Dodanie listy sensorów do wyswietlenia")
         this.sensorsList = sensors as MutableList<SensorsInStation>
+
         notifyDataSetChanged()
     }
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val stationIdText: TextView = view.stationId
         val stationNameText: TextView = view.stationName
         val expandableLayout: ConstraintLayout=view.expanableLayout
         val sensors: TextView = view.textView
 
         init {
             stationNameText.setOnClickListener()
-            {
-                if(expandableLayout.isVisible) {
-                    expandableLayout.isVisible = false
-                }else {
-                    expandableLayout.isVisible = true
-                }
-            }
+           {
+                if (expandableLayout.isVisible) expandableLayout.isVisible = false else expandableLayout.isVisible = true
+//                if(expandableLayout.isVisible) {
+//                    expandableLayout.isVisible = false
+//                }else {
+//                    expandableLayout.isVisible = true
+//                }
+           }
 
-            //val max = if (a > b) a else b
+
 
 //            view.setOnClickListener {
 //                if (adapterPosition != RecyclerView.NO_POSITION) {

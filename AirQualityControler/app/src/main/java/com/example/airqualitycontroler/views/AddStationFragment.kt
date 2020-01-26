@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.view.isEmpty
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -34,6 +35,10 @@ class AddStationFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity!!.setTitle("Add stations")
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +59,7 @@ class AddStationFragment : Fragment() {
         viewModel.listOfStations.observe(viewLifecycleOwner, Observer<List<Station>> {
                 t -> stations=t
             var stationsName:List<String> = stations.map { it.city.name }
-            autotextView.setAdapter(ArrayAdapter<String>(activity!!, android.R.layout.simple_list_item_1, stationsName))
+            autotextView.setAdapter(ArrayAdapter<String>(activity!!, android.R.layout.simple_list_item_1, stationsName.distinct()))
         })
         //var xd: List<FavouriteId> = mutableListOf()
 //        val xd = MutableLiveData<FavouriteId>()
@@ -71,8 +76,6 @@ class AddStationFragment : Fragment() {
                 viewModel.listFavId.observe(viewLifecycleOwner, Observer<List<FavouriteId>> { t ->
                     myAdapter.setFavId(t!!)
                 })
-                val enteredText = autotextView.getText()
-                Toast.makeText(activity, enteredText, Toast.LENGTH_SHORT).show()
             })
         }
         recyclerLoad()

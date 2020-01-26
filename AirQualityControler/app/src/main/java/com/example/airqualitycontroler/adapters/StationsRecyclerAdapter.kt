@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.airqualitycontroler.R
 import com.example.airqualitycontroler.models.Station
 import android.widget.CheckBox
+import android.widget.Toast
 import com.example.airqualitycontroler.models.FavouriteId
 import kotlinx.android.synthetic.main.single_row_station.view.*
 import kotlinx.android.synthetic.main.single_row_station_details.view.stationName
@@ -39,11 +40,6 @@ class StationsRecyclerAdapter(val onItemClick: (Station,Boolean) -> Unit) : Recy
             if(it.favouriteId==station.id)holder.isFavourite.isChecked = true
         }
 
-
-
-
-
-
     }
 
 //    fun setStations(stations: List<Station>) {
@@ -52,7 +48,7 @@ class StationsRecyclerAdapter(val onItemClick: (Station,Boolean) -> Unit) : Recy
 //    }
 
     fun setStationsInCity(stations: List<Station>,city: String) {
-        val stationsInCity = stations.filter { it.city.name.equals(city) }
+        val stationsInCity = stations.filter { it.city.name.equals(city)}
         this.stationList = stationsInCity as MutableList<Station>
         notifyDataSetChanged()
     }

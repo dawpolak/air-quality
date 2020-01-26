@@ -1,9 +1,7 @@
 package com.example.airqualitycontroler.repositories
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.airqualitycontroler.models.*
+import java.net.SocketTimeoutException
 
 class Repository(private val favouriteIdDao: FavouriteIdDao) {
 
@@ -15,6 +13,7 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
 
     //Room
     suspend fun getAllFavId() = favouriteIdDao.getFavouriteIds()
+
     suspend fun insert(favouriteId: FavouriteId) {
         favouriteIdDao.insert(favouriteId)
     }
@@ -22,14 +21,21 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
         favouriteIdDao.deleteFavId(favouriteId)
     }
 
+    //hybrid
+    //returns list of stations whose ids are in the databese (favouriteId)
     suspend  fun  getFavStations(): List<Station>
     {
-        val stations = client.getAllStations()
-        val favId = favouriteIdDao.getFavouriteIds()
+        var stations = listOf<Station>()
+        var favId = listOf<FavouriteId>()
+        try {
+            stations = client.getAllStations()
+            favId = favouriteIdDao.getFavouriteIds()
+        }catch (ste: SocketTimeoutException){}
 
         return stations.filter { it.id in favId.map { Item -> Item.favouriteId }}
     }
-    //suspend fun getSensorsFromStation(station: Station) = client.getAllSensors(station.id)
+
+    //returns list of sensors with values from favourite stations (stations whose ids in the database)
     suspend  fun  getSensorsFromFavStation(): List<SensorsInStation>
     {
         val sensorsInStations = mutableListOf<SensorsInStation>()
@@ -42,7 +48,6 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
             }
             sensorsInStations.add(SensorsInStation(sensors,values))
         }
-
         return sensorsInStations
     }
 
