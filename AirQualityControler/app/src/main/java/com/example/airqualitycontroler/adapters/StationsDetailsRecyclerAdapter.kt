@@ -36,30 +36,23 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
             var station = stationList[position]
             holder.stationNameText.text = station.stationName
 
-
-
-        var sensor: SensorsInStation
-        val sb = StringBuilder()
-
+            var sensor: SensorsInStation
+            val sb = StringBuilder()
             sensor = sensorsList[position]
             for (item: Int in sensor.listOfSensors.indices) {
                 sb.appendln(sensor.listOfSensors[item].param.paramFormula + ": " + sensor.listOfValues[item].values[0].value)
             }
-
             holder.sensors.text = sb
         }
     }
 
     fun setStations(stations: List<Station>) {
-        Log.d("dupa","Dodanie listy miast do wyswietlenia")
         this.stationList = stations as MutableList<Station>
         //notifyDataSetChanged()
     }
 
     fun setSensors(sensors: List<SensorsInStation>) {
-        Log.d("dupa","Dodanie listy sensorów do wyswietlenia")
         this.sensorsList = sensors as MutableList<SensorsInStation>
-
         notifyDataSetChanged()
     }
 
@@ -73,26 +66,14 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
             stationNameText.setOnClickListener()
            {
                 if (expandableLayout.isVisible) expandableLayout.isVisible = false else expandableLayout.isVisible = true
-//                if(expandableLayout.isVisible) {
-//                    expandableLayout.isVisible = false
-//                }else {
-//                    expandableLayout.isVisible = true
-//                }
            }
 
 
 
-//            view.setOnClickListener {
-//                if (adapterPosition != RecyclerView.NO_POSITION) {
-//                    onItemClick(stationList[adapterPosition])
-//                }
-//            }
+
         }
     }
 
-    interface OnTaskListener {
-        fun onTaskClick(position: Int)
 
-    }
 
 }

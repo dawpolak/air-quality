@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 class StationsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: Repository
 
+    //for LiveData refresh using swipeRefreshLayout
     private val reloadTrigger = MutableLiveData<Boolean>()
 
     init {
@@ -18,40 +19,25 @@ class StationsViewModel(application: Application) : AndroidViewModel(application
         repository = Repository(favouriteIdsDao)
         refreshUsers()
     }
+
+    //for LiveData refresh using swipeRefreshLayout
     fun refreshUsers() {
         reloadTrigger.value = true
     }
 
-    //api
-//    val listOfStations = liveData(Dispatchers.IO) {
-//        val retrivedStations = repository.getAllStations()
-//        emit(retrivedStations)
-//    }
-
-//    val listOfSensors = liveData(Dispatchers.IO) {
-//        Log.d("dupa","retrivedStations:"+repository.getSensorsFromFavStation().toString())
-//        val retrivedStations = repository.getSensorsFromFavStation()
-//        emit(retrivedStations)
-//    }
+    //LiveDatas
     val listOfSensors: LiveData<List<SensorsInStation>> = Transformations.switchMap(reloadTrigger) {
         liveData(Dispatchers.IO) {
-            val retrivedStations = repository.getSensorsFromFavStation()
-       emit(retrivedStations)
+            val retrivedSensors = repository.getSensorsFromFavStation()
+        emit(retrivedSensors)
         }
     }
 
-    //baza
 
-
-//    val listOfFavStations = liveData(Dispatchers.IO) {
-//        val retrivedFavId = repository.getFavStations()
-//        Log.d("dupa","viewModel: "+repository.getFavStations().toString())
-//        emit(retrivedFavId)
-//    }
     val listOfFavStations: LiveData<List<Station>> = Transformations.switchMap(reloadTrigger) {
-    liveData(Dispatchers.IO) {
-               val retrivedFavId = repository.getFavStations()
-        emit(retrivedFavId)
-    }
+        liveData(Dispatchers.IO) {
+               val retrivedStations = repository.getFavStations()
+        emit(retrivedStations)
+        }
     }
 }

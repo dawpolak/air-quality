@@ -11,8 +11,6 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.view.isEmpty
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,20 +18,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.airqualitycontroler.R
-import com.example.airqualitycontroler.adapters.StationsRecyclerAdapter
+import com.example.airqualitycontroler.adapters.AddStationsRecyclerAdapter
 import com.example.airqualitycontroler.models.FavouriteId
 import com.example.airqualitycontroler.models.Station
 import com.example.airqualitycontroler.viewmodels.AddStationViewModel
 
 class AddStationFragment : Fragment() {
 
-    lateinit var myAdapter: StationsRecyclerAdapter
+    lateinit var myAdapter: AddStationsRecyclerAdapter
     lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: AddStationViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onResume() {
         super.onResume()
@@ -61,9 +56,6 @@ class AddStationFragment : Fragment() {
             var stationsName:List<String> = stations.map { it.city.name }
             autotextView.setAdapter(ArrayAdapter<String>(activity!!, android.R.layout.simple_list_item_1, stationsName.distinct()))
         })
-        //var xd: List<FavouriteId> = mutableListOf()
-//        val xd = MutableLiveData<FavouriteId>()
-//        viewModel.listFavId.observe(viewLifecycleOwner, Observer<List<FavouriteId>>{t->xd})
 
         val button = getView()!!.findViewById<Button>(R.id.searchButton)
         if (button != null)
@@ -82,8 +74,9 @@ class AddStationFragment : Fragment() {
     }
 
     private fun recyclerLoad() {
-        myAdapter = StationsRecyclerAdapter {arg1,arg2 ->
-            //Log.d("item", "Klikasz w: ${arg1} ${arg2}")
+        myAdapter = AddStationsRecyclerAdapter {arg1,arg2 ->
+            //arg1 -> id of clicked station
+            //arg2 -> true - add to favouriteId, false - delete from favouriteId
             if(arg2)
             {
                 viewModel.insert(FavouriteId(arg1.id))
