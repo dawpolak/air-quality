@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.airqualitycontroler.R
 import com.example.airqualitycontroler.models.SensorsInStation
 import com.example.airqualitycontroler.models.Station
+import com.example.airqualitycontroler.models.StationWithSensors
 import kotlinx.android.synthetic.main.single_row_station_details.view.*
 
 class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : RecyclerView.Adapter<StationsDetailsRecyclerAdapter.ViewHolder>() {
-    private var stationList: MutableList<Station> = mutableListOf()
-    private var sensorsList: MutableList<SensorsInStation> = mutableListOf()
+    private var stationsList: MutableList<StationWithSensors> = mutableListOf()
+    //private var sensorsList: MutableList<SensorsInStation> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.single_row_station_details, parent, false)
@@ -25,20 +26,20 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
     }
 
     override fun getItemCount(): Int {
-        return sensorsList.size
+        return stationsList.size
     }
 
     override fun onBindViewHolder(holder: StationsDetailsRecyclerAdapter.ViewHolder, position: Int) {
         holder.expandableLayout.isVisible = false
-        Log.d("infoo","sensors:"+sensorsList.size.toString()+"stations:"+stationList.size.toString())
-        if(!sensorsList.isEmpty()&&!stationList.isEmpty()) {
+        //Log.d("infoo","sensors:"+sensorsList.size.toString()+"stations:"+stationList.size.toString())
+        if(!stationsList.isEmpty()){
 
-            var station = stationList[position]
-            holder.stationNameText.text = station.stationName
+
+            holder.stationNameText.text = stationsList[position].station.stationName
 
             var sensor: SensorsInStation
             val sb = StringBuilder()
-            sensor = sensorsList[position]
+            sensor = stationsList[position].sensor
             for (item: Int in sensor.listOfSensors.indices) {
                 sb.appendln(sensor.listOfSensors[item].param.paramFormula + ": " + sensor.listOfValues[item].values[0].value)
             }
@@ -46,15 +47,22 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
         }
     }
 
-    fun setStations(stations: List<Station>) {
-        this.stationList = stations as MutableList<Station>
-        //notifyDataSetChanged()
-    }
+//    fun setStations(stations: List<Station>) {
+//        this.stationList = stations as MutableList<Station>
+//        //notifyDataSetChanged()
+//    }
+//
+//    fun setSensors(sensors: List<SensorsInStation>) {
+//        this.sensorsList = sensors as MutableList<SensorsInStation>
+//        notifyDataSetChanged()
+//    }
 
-    fun setSensors(sensors: List<SensorsInStation>) {
-        this.sensorsList = sensors as MutableList<SensorsInStation>
+    fun setStationsWithSensors(ststionsWithSensors: List<StationWithSensors>) {
+        this.stationsList = ststionsWithSensors as MutableList<StationWithSensors>
         notifyDataSetChanged()
     }
+
+
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

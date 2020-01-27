@@ -17,6 +17,7 @@ import com.example.airqualitycontroler.R
 import com.example.airqualitycontroler.adapters.StationsDetailsRecyclerAdapter
 import com.example.airqualitycontroler.models.SensorsInStation
 import com.example.airqualitycontroler.models.Station
+import com.example.airqualitycontroler.models.StationWithSensors
 import com.example.airqualitycontroler.viewmodels.StationsViewModel
 
 class StationsFragment : Fragment() {
@@ -59,19 +60,19 @@ class StationsFragment : Fragment() {
 
     private fun fetchUsers() {
         swipeRefreshLayout.isRefreshing = true
-        viewModel.listOfFavStations.observe(viewLifecycleOwner, Observer { station -> station?.let { displayUsers(it) } })
+        viewModel.listOfFavStationsWithSensors.observe(viewLifecycleOwner, Observer { station -> station?.let { displayUsers(it) } })
     }
 
-    private fun displayUsers(stations: List<Station>) {
+    private fun displayUsers(stations: List<StationWithSensors>) {
         swipeRefreshLayout.isRefreshing = false
 
         //get data from viewModel and put them to RecyclerAdapter
-        viewModel.listOfSensors.observe(viewLifecycleOwner, Observer<List<SensorsInStation>> {
-                t -> myAdapter.setSensors(t!!)
+        viewModel.listOfFavStationsWithSensors.observe(viewLifecycleOwner, Observer<List<StationWithSensors>> {
+                t -> myAdapter.setStationsWithSensors(t!!)
         })
-        viewModel.listOfFavStations.observe(viewLifecycleOwner, Observer<List<Station>> {
-                t -> myAdapter.setStations(t!!)
-        })
+//        viewModel.listOfFavStations.observe(viewLifecycleOwner, Observer<List<Station>> {
+//                t -> myAdapter.setStations(t!!)
+//        })
 
     }
 

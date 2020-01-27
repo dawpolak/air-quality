@@ -1,7 +1,12 @@
 package com.example.airqualitycontroler.models
 import com.google.gson.annotations.SerializedName
 
-
+data class StationWithSensors(
+    @SerializedName("station")
+    val station: Station,
+    @SerializedName("sensor")
+    val sensor: SensorsInStation
+)
 
 data class Station(
     @SerializedName("addressStreet")

@@ -26,18 +26,24 @@ class StationsViewModel(application: Application) : AndroidViewModel(application
     }
 
     //LiveDatas!!!!!!!!
-    val listOfSensors: LiveData<List<SensorsInStation>> = Transformations.switchMap(reloadTrigger) {
-        liveData(Dispatchers.IO) {
-            val retrivedSensors = repository.getSensorsFromFavStation()
-        emit(retrivedSensors)
-        }
-    }
+//    val listOfSensors: LiveData<List<SensorsInStation>> = Transformations.switchMap(reloadTrigger) {
+//        liveData(Dispatchers.IO) {
+//            val retrivedSensors = repository.getSensorsFromFavStation()
+//        emit(retrivedSensors)
+//        }
+//    }
 
 
     val listOfFavStations: LiveData<List<Station>> = Transformations.switchMap(reloadTrigger) {
         liveData(Dispatchers.IO) {
                val retrivedStations = repository.getFavStations()
         emit(retrivedStations)
+        }
+    }
+    val listOfFavStationsWithSensors: LiveData<List<StationWithSensors>> = Transformations.switchMap(reloadTrigger) {
+        liveData(Dispatchers.IO) {
+            val retrivedStations = repository.getFavStationsWithSensors()
+            emit(retrivedStations)
         }
     }
 }

@@ -29,7 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColorLink="@color/colorStar" />
+            android:textColorLink="@color/colorStar"
+            android:textColorHint="@color/colorStar"
+            android:shadowColor="@color/colorStar"/>
     </LinearLayout>
 
 
