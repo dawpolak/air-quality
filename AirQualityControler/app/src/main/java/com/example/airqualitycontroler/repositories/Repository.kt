@@ -12,9 +12,6 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
         suspend fun getAllStations() = try{client.getAllStations()}catch(e: Exception){listOf<Station>()}
 
 
-
-
-
     //Room
     suspend fun getAllFavId() = favouriteIdDao.getFavouriteIds()
 
@@ -61,12 +58,12 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
     {
         val stationsWithSensors = mutableListOf<StationWithSensors>()
         val sensorsInStations = mutableListOf<SensorsInStation>()
-        //var stations = listOf<Station>()
 
+        try {
+            val favId = favouriteIdDao.getFavouriteIds()
 
-        val favId = favouriteIdDao.getFavouriteIds()
-
-        val favStations = client.getAllStations().filter { it.id in favId.map { Item -> Item.favouriteId }}
+            val favStations =
+                client.getAllStations().filter { it.id in favId.map { Item -> Item.favouriteId } }
 
             favStations.forEach {
                 val sensors = client.getAllSensors(it.id)
@@ -74,9 +71,11 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
                 sensors.forEach {
                     values.add(client.getAllValues(it.id))
                 }
-                stationsWithSensors.add(StationWithSensors(it,SensorsInStation(sensors, values)))
+                stationsWithSensors.add(StationWithSensors(it, SensorsInStation(sensors, values)))
                 sensorsInStations.add(SensorsInStation(sensors, values))
             }
+        }catch(e:Exception){}
+
         return stationsWithSensors
     }
 }
