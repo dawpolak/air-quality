@@ -7,7 +7,11 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
 
     //API
     private var client: IWebservice = RetrofitClient.webservice
-    suspend fun getAllStations() = client.getAllStations()
+
+
+        suspend fun getAllStations() = try{client.getAllStations()}catch(e: Exception){listOf<Station>()}
+
+
 
 
 
@@ -30,7 +34,7 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
         try {
             stations = client.getAllStations()
             favId = favouriteIdDao.getFavouriteIds()
-        }catch (ste: SocketTimeoutException){}
+        }catch (ste: Exception){}
 
         return stations.filter { it.id in favId.map { Item -> Item.favouriteId }}
     }
@@ -39,17 +43,17 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
     suspend  fun  getSensorsFromFavStation(): List<SensorsInStation>
     {
         val sensorsInStations = mutableListOf<SensorsInStation>()
-        val favId = favouriteIdDao.getFavouriteIds()
-        favId.forEach{
-            val sensors = client.getAllSensors(it.favouriteId)
-            val values = mutableListOf<Value>()
-            sensors.forEach{
-                values.add(client.getAllValues(it.id))
+        try {
+            val favId = favouriteIdDao.getFavouriteIds()
+            favId.forEach {
+                val sensors = client.getAllSensors(it.favouriteId)
+                val values = mutableListOf<Value>()
+                sensors.forEach {
+                    values.add(client.getAllValues(it.id))
+                }
+                sensorsInStations.add(SensorsInStation(sensors, values))
             }
-            sensorsInStations.add(SensorsInStation(sensors,values))
-        }
+        }catch(ste: Exception){}
         return sensorsInStations
     }
-
-
 }

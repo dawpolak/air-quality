@@ -64,6 +64,8 @@ class StationsFragment : Fragment() {
 
     private fun displayUsers(stations: List<Station>) {
         swipeRefreshLayout.isRefreshing = false
+
+        //get data from viewModel and put them to RecyclerAdapter
         viewModel.listOfSensors.observe(viewLifecycleOwner, Observer<List<SensorsInStation>> {
                 t -> myAdapter.setSensors(t!!)
         })

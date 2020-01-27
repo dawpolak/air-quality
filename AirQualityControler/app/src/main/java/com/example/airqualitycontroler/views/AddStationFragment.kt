@@ -65,6 +65,7 @@ class AddStationFragment : Fragment() {
                 viewModel.listOfStations.observe(viewLifecycleOwner, Observer<List<Station>> { t ->
                     myAdapter.setStationsInCity(t!!,autotextView.getText().toString())
                 })
+
                 viewModel.listFavId.observe(viewLifecycleOwner, Observer<List<FavouriteId>> { t ->
                     myAdapter.setFavId(t!!)
                 })

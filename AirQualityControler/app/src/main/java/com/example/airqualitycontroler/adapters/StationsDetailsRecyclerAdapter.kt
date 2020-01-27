@@ -67,10 +67,6 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
            {
                 if (expandableLayout.isVisible) expandableLayout.isVisible = false else expandableLayout.isVisible = true
            }
-
-
-
-
         }
     }
 

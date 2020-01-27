@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        //dodaenie fragmentu przy starcie
         supportFragmentManager.beginTransaction().add(R.id.container,StationsFragment()).commit()
     }
 

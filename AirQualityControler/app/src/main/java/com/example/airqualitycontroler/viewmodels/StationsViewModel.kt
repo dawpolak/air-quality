@@ -25,7 +25,7 @@ class StationsViewModel(application: Application) : AndroidViewModel(application
         reloadTrigger.value = true
     }
 
-    //LiveDatas
+    //LiveDatas!!!!!!!!
     val listOfSensors: LiveData<List<SensorsInStation>> = Transformations.switchMap(reloadTrigger) {
         liveData(Dispatchers.IO) {
             val retrivedSensors = repository.getSensorsFromFavStation()

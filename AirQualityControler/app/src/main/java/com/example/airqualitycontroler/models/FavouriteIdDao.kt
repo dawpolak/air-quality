@@ -16,8 +16,8 @@ interface FavouriteIdDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(id: FavouriteId)
 
-    @Query("DELETE FROM favouriteId_table")
-    suspend fun deleteAll()
+//    @Query("DELETE FROM favouriteId_table")
+//    suspend fun deleteAll()
 
     @Delete
     suspend fun deleteFavId(favId: FavouriteId)
