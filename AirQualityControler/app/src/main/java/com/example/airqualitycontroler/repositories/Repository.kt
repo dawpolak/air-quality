@@ -36,24 +36,6 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
         return stations.filter { it.id in favId.map { Item -> Item.favouriteId }}
     }
 
-    //returns list of sensors with values from favourite stations (stations whose ids in the database)
-//    suspend  fun  getSensorsFromFavStation(): List<SensorsInStation>
-//    {
-//        val sensorsInStations = mutableListOf<SensorsInStation>()
-//        try {
-//            val favId = favouriteIdDao.getFavouriteIds()
-//            favId.forEach {
-//                val sensors = client.getAllSensors(it.favouriteId)
-//                val values = mutableListOf<Value>()
-//                sensors.forEach {
-//                    values.add(client.getAllValues(it.id))
-//                }
-//                sensorsInStations.add(SensorsInStation(sensors, values))
-//            }
-//        }catch(ste: Exception){}
-//        return sensorsInStations
-//    }
-
     suspend fun getFavStationsWithSensors():List<StationWithSensors>
     {
         val stationsWithSensors = mutableListOf<StationWithSensors>()
@@ -65,13 +47,13 @@ class Repository(private val favouriteIdDao: FavouriteIdDao) {
             val favStations =
                 client.getAllStations().filter { it.id in favId.map { Item -> Item.favouriteId } }
 
-            favStations.forEach {
-                val sensors = client.getAllSensors(it.id)
+            favStations.forEach { station ->
+                val sensors = client.getAllSensors(station.id)
                 val values = mutableListOf<Value>()
                 sensors.forEach {
                     values.add(client.getAllValues(it.id))
                 }
-                stationsWithSensors.add(StationWithSensors(it, SensorsInStation(sensors, values)))
+                stationsWithSensors.add(StationWithSensors(station, SensorsInStation(sensors, values)))
                 sensorsInStations.add(SensorsInStation(sensors, values))
             }
         }catch(e:Exception){}

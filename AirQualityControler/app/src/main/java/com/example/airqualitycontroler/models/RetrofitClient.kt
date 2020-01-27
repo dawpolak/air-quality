@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     val webservice by lazy {
         Retrofit.Builder()
-            .baseUrl("http://api.gios.gov.pl/pjp-api/rest/")
+            .baseUrl("https://api.gios.gov.pl/pjp-api/rest/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build().create(IWebservice::class.java)
     }

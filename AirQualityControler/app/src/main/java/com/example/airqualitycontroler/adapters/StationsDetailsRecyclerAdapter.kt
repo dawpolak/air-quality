@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.single_row_station_details.view.*
 
 class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : RecyclerView.Adapter<StationsDetailsRecyclerAdapter.ViewHolder>() {
     private var stationsList: MutableList<StationWithSensors> = mutableListOf()
-    //private var sensorsList: MutableList<SensorsInStation> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.single_row_station_details, parent, false)
@@ -31,39 +30,36 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
 
     override fun onBindViewHolder(holder: StationsDetailsRecyclerAdapter.ViewHolder, position: Int) {
         holder.expandableLayout.isVisible = false
-        //Log.d("infoo","sensors:"+sensorsList.size.toString()+"stations:"+stationList.size.toString())
         if(!stationsList.isEmpty()){
-
 
             holder.stationNameText.text = stationsList[position].station.stationName
 
-            var sensor: SensorsInStation
+            var sensors: SensorsInStation
             val sb = StringBuilder()
-            sensor = stationsList[position].sensor
-            for (item: Int in sensor.listOfSensors.indices) {
-                sb.appendln(sensor.listOfSensors[item].param.paramFormula + ": " + sensor.listOfValues[item].values[0].value)
-            }
+            sensors = stationsList[position].sensorsInStation
+
+
+            if(sensors.listOfSensors.size!=0) {
+
+                for (item: Int in sensors.listOfSensors.indices) {
+
+                    if(sensors.listOfValues[item].values.size!=0)
+                    {
+                        sb.appendln(sensors.listOfSensors[item].param.paramFormula + ": " + sensors.listOfValues[item].values[0].value)
+                    }else
+                    {
+                        sb.appendln(sensors.listOfSensors[item].param.paramFormula + ": brak danych")
+                    }
+                }
+            }else sb.append("brak sensorów")
             holder.sensors.text = sb
         }
     }
-
-//    fun setStations(stations: List<Station>) {
-//        this.stationList = stations as MutableList<Station>
-//        //notifyDataSetChanged()
-//    }
-//
-//    fun setSensors(sensors: List<SensorsInStation>) {
-//        this.sensorsList = sensors as MutableList<SensorsInStation>
-//        notifyDataSetChanged()
-//    }
 
     fun setStationsWithSensors(ststionsWithSensors: List<StationWithSensors>) {
         this.stationsList = ststionsWithSensors as MutableList<StationWithSensors>
         notifyDataSetChanged()
     }
-
-
-
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stationNameText: TextView = view.stationName
@@ -77,7 +73,4 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
            }
         }
     }
-
-
-
 }

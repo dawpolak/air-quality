@@ -37,7 +37,7 @@ class StationsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity!!.setTitle("Yours stations")
+        activity!!.setTitle("Your stations")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -70,10 +70,6 @@ class StationsFragment : Fragment() {
         viewModel.listOfFavStationsWithSensors.observe(viewLifecycleOwner, Observer<List<StationWithSensors>> {
                 t -> myAdapter.setStationsWithSensors(t!!)
         })
-//        viewModel.listOfFavStations.observe(viewLifecycleOwner, Observer<List<Station>> {
-//                t -> myAdapter.setStations(t!!)
-//        })
-
     }
 
     private fun recyclerLoad() {
