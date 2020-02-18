@@ -2,7 +2,6 @@ package com.example.airqualitycontroler.views
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.airqualitycontroler.R
 import com.example.airqualitycontroler.adapters.AddStationsRecyclerAdapter
 import com.example.airqualitycontroler.models.FavouriteId
@@ -46,13 +44,12 @@ class AddStationFragment : Fragment() {
 
         recyclerView = getView()!!.findViewById(R.id.add_station_recycler)
 
-
         val autotextView = getView()!!.findViewById<AutoCompleteTextView>(R.id.cityAutoCompleteTextView)
-        var stations = listOf<Station>()
+        //var stations = listOf<Station>()
 
         viewModel = ViewModelProviders.of(this).get(AddStationViewModel::class.java)
         viewModel.listOfStations.observe(viewLifecycleOwner, Observer<List<Station>> {
-                t -> stations=t
+                t -> var stations=t
             var stationsName:List<String> = stations.map { it.city.name }
             autotextView.setAdapter(ArrayAdapter<String>(activity!!, android.R.layout.simple_list_item_1, stationsName.distinct()))
         })
@@ -60,7 +57,6 @@ class AddStationFragment : Fragment() {
         val button = getView()!!.findViewById<Button>(R.id.searchButton)
         if (button != null)
         {
-
             button ?.setOnClickListener(View.OnClickListener {
                 viewModel.listOfStations.observe(viewLifecycleOwner, Observer<List<Station>> { t ->
                     myAdapter.setStationsInCity(t!!,autotextView.getText().toString())

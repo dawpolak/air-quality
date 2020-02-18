@@ -9,7 +9,6 @@ data class SensorsInStation(
 
 )
 
-
 data class Sensor(
     @SerializedName("id")
     val id: Int,

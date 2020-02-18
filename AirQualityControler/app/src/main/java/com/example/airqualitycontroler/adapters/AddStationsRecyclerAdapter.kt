@@ -17,7 +17,6 @@ class AddStationsRecyclerAdapter(val onItemClick: (Station,Boolean) -> Unit) : R
     private var stationList: MutableList<Station> = mutableListOf()
     private var favId: List<FavouriteId> = mutableListOf()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.single_row_station, parent, false)
 
@@ -35,7 +34,6 @@ class AddStationsRecyclerAdapter(val onItemClick: (Station,Boolean) -> Unit) : R
         favId.forEach{
             if(it.favouriteId==station.id)holder.isFavourite.isChecked = true
         }
-
     }
 
     fun setStationsInCity(stations: List<Station>,city: String) {
@@ -53,7 +51,6 @@ class AddStationsRecyclerAdapter(val onItemClick: (Station,Boolean) -> Unit) : R
         val stationNameText: TextView = view.stationName
         val isFavourite: CheckBox = view.checkBoxFavourite
 
-
         init {
             isFavourite.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -62,6 +59,4 @@ class AddStationsRecyclerAdapter(val onItemClick: (Station,Boolean) -> Unit) : R
             }
         }
     }
-
-
 }

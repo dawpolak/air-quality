@@ -60,10 +60,10 @@ class StationsFragment : Fragment() {
 
     private fun fetchUsers() {
         swipeRefreshLayout.isRefreshing = true
-        viewModel.listOfFavStationsWithSensors.observe(viewLifecycleOwner, Observer { station -> station?.let { displayUsers(it) } })
+        viewModel.listOfFavStationsWithSensors.observe(viewLifecycleOwner, Observer { station -> station?.let { displayUsers() } })
     }
 
-    private fun displayUsers(stations: List<StationWithSensors>) {
+    private fun displayUsers() {
         swipeRefreshLayout.isRefreshing = false
 
         //get data from viewModel and put them to RecyclerAdapter
@@ -73,8 +73,8 @@ class StationsFragment : Fragment() {
     }
 
     private fun recyclerLoad() {
-        myAdapter = StationsDetailsRecyclerAdapter {
-        }
+        myAdapter = StationsDetailsRecyclerAdapter ()
+
 
         recyclerView.apply{
             layoutManager = LinearLayoutManager(activity!!, RecyclerView.VERTICAL,false)

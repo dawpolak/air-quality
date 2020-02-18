@@ -1,21 +1,18 @@
 package com.example.airqualitycontroler.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airqualitycontroler.R
 import com.example.airqualitycontroler.models.SensorsInStation
-import com.example.airqualitycontroler.models.Station
 import com.example.airqualitycontroler.models.StationWithSensors
 import kotlinx.android.synthetic.main.single_row_station_details.view.*
 
-class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : RecyclerView.Adapter<StationsDetailsRecyclerAdapter.ViewHolder>() {
+class StationsDetailsRecyclerAdapter : RecyclerView.Adapter<StationsDetailsRecyclerAdapter.ViewHolder>() {
     private var stationsList: MutableList<StationWithSensors> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,7 +42,14 @@ class StationsDetailsRecyclerAdapter(val onItemClick: (Station) -> Unit) : Recyc
 
                     if(sensors.listOfValues[item].values.size!=0)
                     {
-                        sb.appendln(sensors.listOfSensors[item].param.paramFormula + ": " + sensors.listOfValues[item].values[0].value)
+                        for(i in 0..sensors.listOfValues[item].values.size)
+                        {
+                            if(sensors.listOfValues[item].values[i].value!=0.0)
+                            {
+                                sb.appendln(sensors.listOfSensors[item].param.paramFormula + ": " + sensors.listOfValues[item].values[i].value)
+                                break
+                            }
+                        }
                     }else
                     {
                         sb.appendln(sensors.listOfSensors[item].param.paramFormula + ": brak danych")
